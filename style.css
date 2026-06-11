@@ -215,80 +215,81 @@ button:hover { background-color: #4f46e5; }
     margin: 0 auto;
 }
 .header-sistema {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 15px;
-    margin-bottom: 25px;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    flex-wrap: wrap !important;
+    gap: 15px !important;
+    margin-bottom: 25px !important;
+    width: 100% !important;
 }
 
 .seletor-mes-container {
-    display: flex;
-    align-items: center;
-    background-color: #1e293b;
-    border: 1px solid #334155;
-    border-radius: 8px;
-    padding: 4px;
+    display: inline-flex !important;
+    align-items: center !important;
+    background-color: #1e293b !important;
+    border: 1px solid #334155 !important;
+    border-radius: 8px !important;
+    padding: 4px !important;
+    width: auto !important; /* Impede de esticar */
 }
 
-.btn-seta {
-    background: none;
-    border: none;
-    color: #06b6d4;
-    font-size: 1.1rem;
-    padding: 8px 12px;
-    cursor: pointer;
-    transition: transform 0.2s, color 0.2s;
+.btn-seta-mes {
+    background: none !important;
+    border: none !important;
+    color: #06b6d4 !important;
+    font-size: 1.1rem !important;
+    padding: 6px 12px !important;
+    cursor: pointer !important;
+    width: auto !important; /* Força o botão a ser pequeno */
+    height: auto !important;
+    display: inline-block !important;
+    box-shadow: none !important;
+    transition: transform 0.2s, color 0.2s !important;
 }
 
-.btn-seta:hover {
-    color: #22d3ee;
-    transform: scale(1.1);
+.btn-seta-mes:hover {
+    color: #22d3ee !important;
+    transform: scale(1.1) !important;
+    background: none !important;
 }
 
 .input-seletor-mes {
-    background: none;
-    border: none;
-    color: #f8fafc;
-    font-size: 1.1rem;
-    font-weight: 600;
-    padding: 6px 10px;
-    cursor: pointer;
-    text-align: center;
-    outline: none;
+    background: none !important;
+    border: none !important;
+    color: #f8fafc !important;
+    font-size: 1.1rem !important;
+    font-weight: 600 !important;
+    padding: 6px 10px !important;
+    cursor: pointer !important;
+    width: auto !important;
+    outline: none !important;
+    -webkit-appearance: none !important; /* Remove setinha padrão do navegador */
+    -moz-appearance: none !important;
+    appearance: none !important;
+    text-align: center !important;
 }
 
 .input-seletor-mes option {
-    background-color: #1e293b;
-    color: #f8fafc;
+    background-color: #1e293b !important;
+    color: #f8fafc !important;
 }
 
-/* Estilos para os itens do histórico */
+/* Estilos do Bloco de Histórico */
 .historico-valores {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    font-size: 0.85rem;
-    color: #94a3b8;
-}
-
-.historico-valores span strong {
-    color: #f8fafc;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 2px !important;
+    font-size: 0.85rem !important;
+    color: #94a3b8 !important;
 }
 
 .item-positivo {
     color: #10b981 !important;
-    font-weight: bold;
+    font-weight: bold !important;
 }
 
 .item-negativo {
     color: #ef4444 !important;
-    font-weight: bold;
-}
-
-.conta-item.vazio {
-    color: #64748b;
-    justify-content: center;
-    font-style: italic;
+    font-weight: bold !important;
 }
