@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Financeiro Familiar</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<div class="dashboard-container">
+    <header>
+        <h1>Finanças Família 📊</h1>
+    </header>
+
+    <div class="cards-grid">
+        <div class="card card-receita">
+            <h3>Receita Total</h3>
+            <p>R$ <span id="total-receita">0,00</span></p>
+        </div>
+        <div class="card card-pendente">
+            <h3>A Pagar</h3>
+            <p>R$ <span id="total-pendente">0,00</span></p>
+        </div>
+        <div class="card card-pago">
+            <h3>Já Pago</h3>
+            <p>R$ <span id="total-pago">0,00</span></p>
+        </div>
+        <div class="card card-saldo">
+            <h3>Saldo Restante</h3>
+            <p>R$ <span id="total-saldo">0,00</span></p>
+        </div>
+    </div>
+
+    <div class="main-content">
+        
+        <div class="col-esquerda">
+            <div class="section-box">
+                <h2>Salários Fixos</h2>
+                <div class="form-group-inline">
+                    <div>
+                        <label for="salario-1">Meu Salário</label>
+                        <input type="text" id="salario-1" placeholder="R$ 0,00" class="mascara-moeda">
+                    </div>
+                    <div>
+                        <label for="salario-2">Salário Esposa</label>
+                        <input type="text" id="salario-2" placeholder="R$ 0,00" class="mascara-moeda">
+                    </div>
+                </div>
+                <button id="btn-salvar-salarios">Atualizar Salários</button>
+            </div>
+
+            <div class="section-box">
+                <h2>Nova Receita Extra</h2>
+                <form id="form-receita">
+                    <div class="form-group">
+                        <label for="receita-nome">Origem / Descrição</label>
+                        <input type="text" id="receita-nome" placeholder="Ex: Reembolso, Freela" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="receita-valor">Valor</label>
+                        <input type="text" id="receita-valor" placeholder="R$ 0,00" class="mascara-moeda" required>
+                    </div>
+                    <button type="submit" class="btn-sucesso">Adicionar Receita</button>
+                </form>
+            </div>
+
+            <div class="section-box">
+                <h2>Nova Conta a Pagar</h2>
+                <form id="form-conta">
+                    <div class="form-group">
+                        <label for="nome">Nome da Conta</label>
+                        <input type="text" id="nome" placeholder="Ex: Luz, Aluguel" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="valor">Valor</label>
+                        <input type="text" id="valor" placeholder="R$ 0,00" class="mascara-moeda" required>
+                    </div>
+                    <button type="submit">Adicionar Conta</button>
+                </form>
+            </div>
+
+            <div class="section-box">
+                <h2>Receitas Extras Adicionadas</h2>
+                <ul id="lista-receitas" class="lista-contas">
+                    </ul>
+            </div>
+        </div>
+
+        <div class="col-direita chart-sticky">
+            <div class="section-box">
+                <h2>Resumo Visual das Finanças</h2>
+                <div class="chart-container">
+                    <canvas id="graficoFinancas"></canvas>
+                </div>
+            </div>
+
+            <div class="section-box">
+                <h2>Listagem de Contas</h2>
+                <ul id="lista-contas" class="lista-contas">
+                    </ul>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
