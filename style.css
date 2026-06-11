@@ -214,3 +214,81 @@ button:hover { background-color: #4f46e5; }
     max-width: 450px;
     margin: 0 auto;
 }
+.header-sistema {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.seletor-mes-container {
+    display: flex;
+    align-items: center;
+    background-color: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    padding: 4px;
+}
+
+.btn-seta {
+    background: none;
+    border: none;
+    color: #06b6d4;
+    font-size: 1.1rem;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: transform 0.2s, color 0.2s;
+}
+
+.btn-seta:hover {
+    color: #22d3ee;
+    transform: scale(1.1);
+}
+
+.input-seletor-mes {
+    background: none;
+    border: none;
+    color: #f8fafc;
+    font-size: 1.1rem;
+    font-weight: 600;
+    padding: 6px 10px;
+    cursor: pointer;
+    text-align: center;
+    outline: none;
+}
+
+.input-seletor-mes option {
+    background-color: #1e293b;
+    color: #f8fafc;
+}
+
+/* Estilos para os itens do histórico */
+.historico-valores {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    font-size: 0.85rem;
+    color: #94a3b8;
+}
+
+.historico-valores span strong {
+    color: #f8fafc;
+}
+
+.item-positivo {
+    color: #10b981 !important;
+    font-weight: bold;
+}
+
+.item-negativo {
+    color: #ef4444 !important;
+    font-weight: bold;
+}
+
+.conta-item.vazio {
+    color: #64748b;
+    justify-content: center;
+    font-style: italic;
+}
