@@ -127,7 +127,17 @@
                     <canvas id="graficoFinancas"></canvas>
                 </div>
             </div>
-
+                <section class="section-box">
+                    <h2>Filtrar Gastos</h2>
+                    <div class="filtros">
+                        <select id="filtro-categoria" onchange="filtrarDados()">
+                            <option value="Todas">Todas as Categorias</option>
+                            <option value="Moradia">🏠 Moradia</option>
+                            <option value="Alimentação">🛒 Alimentação</option>
+                            <option value="Lazer">🎮 Lazer</option>
+                            </select>
+                    </div>
+                </section>
             <div class="section-box">
                 <h2>Listagem de Contas</h2>
                 <ul id="lista-contas"></ul>
