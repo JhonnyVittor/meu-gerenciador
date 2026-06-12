@@ -293,3 +293,31 @@ button:hover { background-color: #4f46e5; }
     color: #ef4444 !important;
     font-weight: bold !important;
 }
+/* Alerta de Saldo Negativo */
+.card-saldo.negativo {
+    background-color: #7f1d1d !important; /* Vermelho escuro elegante */
+    border-left: 5px solid #ef4444 !important; /* Borda vermelha viva */
+}
+
+.card-saldo.negativo h3, 
+.card-saldo.negativo p, 
+.card-saldo.negativo span {
+    color: #fee2e2 !important; /* Texto claro para dar leitura no fundo vermelho */
+}
+
+/* Badge (etiqueta) do Dia de Vencimento */
+.badge-vencimento {
+    background-color: #334155;
+    color: #94a3b8;
+    font-size: 0.75rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 8px;
+    font-weight: normal;
+}
+
+.paga .badge-vencimento {
+    background-color: #1e293b;
+    color: #64748b;
+    text-decoration: none !important;
+}
