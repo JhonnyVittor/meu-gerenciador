@@ -124,16 +124,18 @@ function atualizarDashboard() {
         const txtVencimento = conta.vencimento ? `<span class="badge-vencimento">Vence dia ${conta.vencimento}</span>` : '';
 
         li.innerHTML = `
-            <div class="conta-info">
-                <strong>${conta.nome} ${txtVencimento}</strong>
-                <span style="font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase;">${conta.categoria || 'Sem categoria'}</span>
-                <span>R$ ${formatarFloatParaReal(conta.valor)}</span>
-            </div>
-            <div class="acoes">
-                <button class="btn-status" onclick="alternarStatusConta(${index})">${conta.paga ? '✓ Pago' : 'Pagar'}</button>
-                <button class="btn-remover" onclick="removerConta(${index})">X</button>
-            </div>
-        `;
+    <div class="conta-info">
+        <strong>${conta.nome} ${txtVencimento}</strong>
+        <span class="cat-tag" style="font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase;">
+            ${conta.categoria || 'Sem categoria'}
+        </span>
+        <span>R$ ${formatarFloatParaReal(conta.valor)}</span>
+    </div>
+    <div class="acoes">
+        <button class="btn-status" onclick="alternarStatusConta(${index})">${conta.paga ? '✓ Pago' : 'Pagar'}</button>
+        <button class="btn-remover" onclick="removerConta(${index})">X</button>
+    </div>
+`;
         listaContasElement.appendChild(li);
     });
 
@@ -348,13 +350,14 @@ window.filtrarDados = () => {
     const items = document.querySelectorAll('#lista-contas .conta-item');
 
     items.forEach(item => {
-        // Pega o texto da categoria que você inseriu no span lá atrás
-        const categoriaItem = item.querySelector('span').innerText.toUpperCase();
+        // Agora buscamos pelo span que tem a classe ou o estilo específico da categoria
+        const spanCat = item.querySelector('.cat-tag'); 
+        const categoriaItem = spanCat ? spanCat.innerText.trim() : 'Outros';
         
-        if (categoriaSelecionada === 'Todas' || categoriaItem.includes(categoriaSelecionada.toUpperCase())) {
-            item.style.display = 'flex'; // Mostra
+        if (categoriaSelecionada === 'Todas' || categoriaItem === categoriaSelecionada) {
+            item.style.display = 'flex';
         } else {
-            item.style.display = 'none'; // Esconde
+            item.style.display = 'none';
         }
     });
 };
