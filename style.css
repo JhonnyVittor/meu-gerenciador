@@ -1,3 +1,3 @@
-@import "./css/variaveis.css";
-@import "./css/layout.css";
-@import "./componentes.css";
+@import "css/layout.css";
+@import "css/componentes.css";
+@import "css/variaveis.css"
