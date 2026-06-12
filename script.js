@@ -182,7 +182,11 @@ async function buscarUltimosSalarios() {
 }
 
 function conectarHistoricoGeral() {
-    onSnapshot(doc(db, "historico_consolidado", "geral"), (snapshot) => {
+    const histRef = doc(db, "historico_consolidado", "geral");
+    onSnapshot(histRef, (snapshot) => {
+        // Proteção: verifica se o elemento realmente existe na tela antes de mexer
+        if (!listaHistorico) return; 
+        
         listaHistorico.innerHTML = '';
         if (snapshot.exists()) {
             const dados = snapshot.data();
@@ -235,37 +239,46 @@ function atualizarGrafico(saldo, pendente, pago) {
 }
 
 // ==========================================
-// INICIALIZAÇÃO E EVENTOS
+// INICIALIZAÇÃO SEGURA (ESPERA O HTML)
 // ==========================================
-inicializarSeletorMeses();
-conectarMesAtivo();
-conectarHistoricoGeral();
+function inicializarTudo() {
+    inicializarSeletorMeses();
+    conectarMesAtivo();
+    conectarHistoricoGeral();
 
-seletorMes.addEventListener('change', conectarMesAtivo);
-btnMesAnterior.addEventListener('click', () => { if (seletorMes.selectedIndex > 0) { seletorMes.selectedIndex--; conectarMesAtivo(); } });
-btnMesProximo.addEventListener('click', () => { if (seletorMes.selectedIndex < seletorMes.options.length - 1) { seletorMes.selectedIndex++; conectarMesAtivo(); } });
+    seletorMes.addEventListener('change', conectarMesAtivo);
+    btnMesAnterior.addEventListener('click', () => { if (seletorMes.selectedIndex > 0) { seletorMes.selectedIndex--; conectarMesAtivo(); } });
+    btnMesProximo.addEventListener('click', () => { if (seletorMes.selectedIndex < seletorMes.options.length - 1) { seletorMes.selectedIndex++; conectarMesAtivo(); } });
 
-btnSalvarSalarios.addEventListener('click', () => {
-    salarios.s1 = formatarStringParaFloat(inputSalario1.value);
-    salarios.s2 = formatarStringParaFloat(inputSalario2.value);
-    salvarNoFirebase();
-    alert('Salários fixos atualizados para este mês!');
-});
+    btnSalvarSalarios.addEventListener('click', () => {
+        salarios.s1 = formatarStringParaFloat(inputSalario1.value);
+        salarios.s2 = formatarStringParaFloat(inputSalario2.value);
+        salvarNoFirebase();
+        alert('Salários fixos atualizados para este mês!');
+    });
 
-formReceita.addEventListener('submit', (e) => {
-    e.preventDefault();
-    receitasExtras.push({ nome: receitaNomeInput.value, valor: formatarStringParaFloat(receitaValorInput.value) });
-    salvarNoFirebase();
-    receitaNomeInput.value = ''; receitaValorInput.value = ''; receitaNomeInput.focus();
-});
+    formReceita.addEventListener('submit', (e) => {
+        e.preventDefault();
+        receitasExtras.push({ nome: receitaNomeInput.value, valor: formatarStringParaFloat(receitaValorInput.value) });
+        salvarNoFirebase();
+        receitaNomeInput.value = ''; receitaValorInput.value = ''; receitaNomeInput.focus();
+    });
 
-formConta.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const vencimentoInput = document.getElementById('vencimento');
-    contas.push({ nome: nomeInput.value, vencimento: vencimentoInput.value, valor: formatarStringParaFloat(valorInput.value), paga: false });
-    salvarNoFirebase();
-    nomeInput.value = ''; vencimentoInput.value = ''; valorInput.value = ''; nomeInput.focus();
-});
+    formConta.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const vencimentoInput = document.getElementById('vencimento');
+        contas.push({ nome: nomeInput.value, vencimento: vencimentoInput.value, valor: formatarStringParaFloat(valorInput.value), paga: false });
+        salvarNoFirebase();
+        nomeInput.value = ''; vencimentoInput.value = ''; valorInput.value = ''; nomeInput.focus();
+    });
+}
+
+// Executa o inicializador assim que o DOM estiver pronto
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', inicializarTudo);
+} else {
+    inicializarTudo();
+}
 
 window.alternarStatusConta = index => { contas[index].paga = !contas[index].paga; salvarNoFirebase(); };
 window.removerConta = index => { if (confirm('Deseja apagar esta conta?')) { contas.splice(index, 1); salvarNoFirebase(); } };
