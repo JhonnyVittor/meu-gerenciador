@@ -77,15 +77,23 @@ function atualizarDashboard() {
     let totalPago = 0;
 
     receitasExtras.forEach((extra, index) => {
-        totalExtras += extra.valor;
-        const li = document.createElement('li');
-        li.className = 'conta-item';
-        li.innerHTML = `
-            <div class="conta-info"><strong>${extra.nome}</strong><span style="color: #10b981">+ R$ ${formatarFloatParaReal(extra.valor)}</span></div>
-            <div class="acoes"><button class="btn-remover" onclick="removerReceitaExtra(${index})">X</button></div>
-        `;
-        listaReceitas.appendChild(li);
-    });
+    totalExtras += extra.valor;
+    const li = document.createElement('li');
+    li.className = 'conta-item';
+    li.innerHTML = `
+        <div class="conta-info">
+            <strong>${extra.nome}</strong>
+            <span style="font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase;">
+                ${extra.categoria || 'Sem categoria'}
+            </span>
+            <span style="color: #10b981">+ R$ ${formatarFloatParaReal(extra.valor)}</span>
+        </div>
+        <div class="acoes">
+            <button class="btn-remover" onclick="removerReceitaExtra(${index})">X</button>
+        </div>
+    `;
+    listaReceitas.appendChild(li);
+});
 
     let receitaTotal = baseSalarios + totalExtras;
 
@@ -265,12 +273,20 @@ function inicializarTudo() {
     });
 
     formConta.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const vencimentoInput = document.getElementById('vencimento');
-        contas.push({ nome: nomeInput.value, vencimento: vencimentoInput.value, valor: formatarStringParaFloat(valorInput.value), paga: false });
-        salvarNoFirebase();
-        nomeInput.value = ''; vencimentoInput.value = ''; valorInput.value = ''; nomeInput.focus();
+    e.preventDefault();
+    const categoriaInput = document.getElementById('categoria'); // Captura o select
+    contas.push({ 
+        nome: nomeInput.value, 
+        vencimento: document.getElementById('vencimento').value, 
+        valor: formatarStringParaFloat(valorInput.value), 
+        categoria: categoriaInput.value, // Salva a categoria
+        paga: false 
     });
+    salvarNoFirebase();
+    nomeInput.value = ''; 
+    valorInput.value = ''; 
+    nomeInput.focus();
+});
 }
 
 // Executa o inicializador assim que o DOM estiver pronto
