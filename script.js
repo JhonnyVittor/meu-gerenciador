@@ -272,18 +272,26 @@ function inicializarTudo() {
         receitaNomeInput.value = ''; receitaValorInput.value = ''; receitaNomeInput.focus();
     });
 
-    formConta.addEventListener('submit', (e) => {
+   formConta.addEventListener('submit', (e) => {
     e.preventDefault();
-    const categoriaInput = document.getElementById('categoria'); // Captura o select
+    
+    // Captura o elemento do select de categoria
+    const categoriaInput = document.getElementById('categoria'); 
+    const vencimentoInput = document.getElementById('vencimento');
+    
     contas.push({ 
         nome: nomeInput.value, 
-        vencimento: document.getElementById('vencimento').value, 
+        vencimento: vencimentoInput.value, 
         valor: formatarStringParaFloat(valorInput.value), 
-        categoria: categoriaInput.value, // Salva a categoria
+        categoria: categoriaInput.value, // <--- Isso salva o valor no array
         paga: false 
     });
-    salvarNoFirebase();
+    
+    salvarNoFirebase(); // Isso envia o objeto completo (nome, valor, categoria) para o banco
+    
+    // Limpeza dos campos
     nomeInput.value = ''; 
+    vencimentoInput.value = ''; 
     valorInput.value = ''; 
     nomeInput.focus();
 });
