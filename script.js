@@ -68,51 +68,87 @@ document.querySelectorAll('.mascara-moeda').forEach(input => {
 // RENDERIZAÇÃO DO PAINEL
 // ==========================================
 function atualizarDashboard() {
-    listaContas.innerHTML = '';
-    listaReceitas.innerHTML = '';
+    // 1. Definição segura dos elementos
+    const listaContasElement = document.getElementById('lista-contas');
+    const listaReceitasElement = document.getElementById('lista-receitas');
+    const resumoCategoriasElement = document.getElementById('resumo-categorias');
+
+    if (!listaContasElement || !listaReceitasElement || !resumoCategoriasElement) return;
+
+    listaContasElement.innerHTML = '';
+    listaReceitasElement.innerHTML = '';
+    resumoCategoriasElement.innerHTML = '';
     
     let baseSalarios = (parseFloat(salarios.s1) || 0) + (parseFloat(salarios.s2) || 0);
     let totalExtras = 0;
     let totalPendente = 0;
     let totalPago = 0;
 
+    // Renderiza Receitas
     receitasExtras.forEach((extra, index) => {
-    totalExtras += extra.valor;
-    const li = document.createElement('li');
-    li.className = 'conta-item';
-    li.innerHTML = `
-        <div class="conta-info">
-            <strong>${extra.nome}</strong>
-            <span style="font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase;">
-                ${extra.categoria || 'Sem categoria'}
-            </span>
-            <span style="color: #10b981">+ R$ ${formatarFloatParaReal(extra.valor)}</span>
-        </div>
-        <div class="acoes">
-            <button class="btn-remover" onclick="removerReceitaExtra(${index})">X</button>
-        </div>
-    `;
-    listaReceitas.appendChild(li);
-});
+        totalExtras += extra.valor;
+        const li = document.createElement('li');
+        li.className = 'conta-item';
+        li.innerHTML = `
+            <div class="conta-info">
+                <strong>${extra.nome}</strong>
+                <span style="font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase;">
+                    ${extra.categoria || 'Sem categoria'}
+                </span>
+                <span style="color: #10b981">+ R$ ${formatarFloatParaReal(extra.valor)}</span>
+            </div>
+            <div class="acoes">
+                <button class="btn-remover" onclick="removerReceitaExtra(${index})">X</button>
+            </div>
+        `;
+        listaReceitasElement.appendChild(li);
+    });
 
     let receitaTotal = baseSalarios + totalExtras;
 
+    // LÓGICA DE AGRUPAMENTO POR CATEGORIA (Soma apenas pendentes)
+    let somaPorCategoria = {};
+
+    // Renderiza Contas
     contas.forEach((conta, index) => {
         conta.paga ? totalPago += conta.valor : totalPendente += conta.valor;
+        
+        // Acumula soma por categoria para o resumo
+        if (!conta.paga) {
+            let cat = conta.categoria || 'Outros';
+            somaPorCategoria[cat] = (somaPorCategoria[cat] || 0) + conta.valor;
+        }
+
         const li = document.createElement('li');
         li.className = `conta-item ${conta.paga ? 'paga' : ''}`;
         const txtVencimento = conta.vencimento ? `<span class="badge-vencimento">Vence dia ${conta.vencimento}</span>` : '';
 
         li.innerHTML = `
-            <div class="conta-info"><strong>${conta.nome} ${txtVencimento}</strong><span>R$ ${formatarFloatParaReal(conta.valor)}</span></div>
+            <div class="conta-info">
+                <strong>${conta.nome} ${txtVencimento}</strong>
+                <span style="font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase;">${conta.categoria || 'Sem categoria'}</span>
+                <span>R$ ${formatarFloatParaReal(conta.valor)}</span>
+            </div>
             <div class="acoes">
                 <button class="btn-status" onclick="alternarStatusConta(${index})">${conta.paga ? '✓ Pago' : 'Pagar'}</button>
                 <button class="btn-remover" onclick="removerConta(${index})">X</button>
             </div>
         `;
-        listaContas.appendChild(li);
+        listaContasElement.appendChild(li);
     });
 
+    // Renderiza o Resumo de Categorias na tela
+    Object.keys(somaPorCategoria).forEach(cat => {
+        const li = document.createElement('li');
+        li.className = 'conta-item';
+        li.innerHTML = `
+            <div class="conta-info"><strong>${cat}</strong></div>
+            <div class="conta-info" style="text-align: right;"><span>R$ ${formatarFloatParaReal(somaPorCategoria[cat])}</span></div>
+        `;
+        resumoCategoriasElement.appendChild(li);
+    });
+
+    // Atualiza Totais
     let saldoRestante = receitaTotal - (totalPendente + totalPago);
     cardReceita.textContent = formatarFloatParaReal(receitaTotal);
     cardPendente.textContent = formatarFloatParaReal(totalPendente);
@@ -126,34 +162,6 @@ function atualizarDashboard() {
 
     atualizarGrafico(saldoRestante, totalPendente, totalPago);
     salvarResumoNoHistorico(receitaTotal, (totalPendente + totalPago), saldoRestante);
-const resumoCategorias = document.getElementById('resumo-categorias');
-resumoCategorias.innerHTML = ''; // Limpa antes de atualizar
-
-// Cria um objeto para somar os valores
-let somaPorCategoria = {};
-
-contas.forEach(conta => {
-    if (!conta.paga) { // Soma apenas o que ainda está pendente
-        let cat = conta.categoria || 'Outros';
-        somaPorCategoria[cat] = (somaPorCategoria[cat] || 0) + conta.valor;
-    }
-});
-
-// Renderiza a lista de categorias
-Object.keys(somaPorCategoria).forEach(cat => {
-    const li = document.createElement('li');
-    li.className = 'conta-item';
-    li.innerHTML = `
-        <div class="conta-info">
-            <strong>${cat}</strong>
-        </div>
-        <div class="conta-info" style="text-align: right;">
-            <span>R$ ${formatarFloatParaReal(somaPorCategoria[cat])}</span>
-        </div>
-    `;
-    resumoCategorias.appendChild(li);
-});
-
 }
 
 // ==========================================
