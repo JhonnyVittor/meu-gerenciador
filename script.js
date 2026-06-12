@@ -110,31 +110,80 @@ document.querySelectorAll('.mascara-moeda').forEach(input => {
 // ==========================================
 // 5. LÓGICA DO GRÁFICO
 // ==========================================
-function atualizarGrafico(saldo, pendente, pago) {
-    const saldoSeguro = saldo < 0 ? 0 : saldo;
-    const ctx = document.getElementById('graficoFinancas').getContext('2d');
+function atualizarDashboard() {
+    listaContas.innerHTML = '';
+    listaReceitas.innerHTML = '';
     
-    if (meuGrafico) {
-        meuGrafico.data.datasets[0].data = [saldoSeguro, pendente, pago];
-        meuGrafico.update();
-    } else {
-        meuGrafico = new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Saldo Disponível', 'Contas Pendentes', 'Contas Pagas'],
-                datasets: [{
-                    data: [saldoSeguro, pendente, pago],
-                    backgroundColor: ['#06b6d4', '#f59e0b', '#6366f1'],
-                    borderColor: '#1e293b',
-                    borderWidth: 2
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: { legend: { position: 'bottom', labels: { color: '#f8fafc', font: { size: 12 } } } }
-            }
-        });
+    let baseSalarios = (parseFloat(salarios.s1) || 0) + (parseFloat(salarios.s2) || 0);
+    let totalExtras = 0;
+    let totalPendente = 0;
+    let totalPago = 0;
+
+    receitasExtras.forEach((extra, index) => {
+        totalExtras += extra.valor;
+        const li = document.createElement('li');
+        li.className = 'conta-item';
+        li.innerHTML = `
+            <div class="conta-info">
+                <strong>${extra.nome}</strong>
+                <span style="color: #10b981">+ R$ ${formatarFloatParaReal(extra.valor)}</span>
+            </div>
+            <div class="acoes">
+                <button class="btn-remover" onclick="removerReceitaExtra(${index})">X</button>
+            </div>
+        `;
+        listaReceitas.appendChild(li);
+    });
+
+    let revenueTotal = baseSalarios + totalExtras;
+
+    contas.forEach((conta, index) => {
+        if (conta.paga) {
+            totalPago += conta.valor;
+        } else {
+            totalPendente += conta.valor;
+        }
+
+        const li = document.createElement('li');
+        li.className = `conta-item ${conta.paga ? 'paga' : ''}`;
+        
+        // Renderiza o dia de vencimento se ele existir no banco
+        const txtVencimento = conta.vencimento ? `<span class="badge-vencimento">Vence dia ${conta.vencimento}</span>` : '';
+
+        li.innerHTML = `
+            <div class="conta-info">
+                <strong>${conta.nome} ${txtVencimento}</strong>
+                <span>R$ ${formatarFloatParaReal(conta.valor)}</span>
+            </div>
+            <div class="acoes">
+                <button class="btn-status" onclick="alternarStatusConta(${index})">
+                    ${conta.paga ? '✓ Pago' : 'Pagar'}
+                </button>
+                <button class="btn-remover" onclick="removerConta(${index})">X</button>
+            </div>
+        `;
+        listaContas.appendChild(li);
+    });
+
+    let saldoRestante = revenueTotal - (totalPendente + totalPago);
+
+    cardReceita.textContent = formatarFloatParaReal(revenueTotal);
+    cardPendente.textContent = formatarFloatParaReal(totalPendente);
+    cardPago.textContent = formatarFloatParaReal(totalPago);
+    cardSaldo.textContent = formatarFloatParaReal(saldoRestante);
+
+    // Alvo correto: Procura o card-saldo para injetar o alerta vermelho
+    const boxSaldo = document.querySelector('.card-saldo');
+    if (boxSaldo) {
+        if (saldoRestante < 0) {
+            boxSaldo.classList.add('negativo');
+        } else {
+            boxSaldo.classList.remove('negativo');
+        }
     }
+
+    atualizarGrafico(saldoRestante, totalPendente, totalPago);
+    salvarResumoNoHistorico(revenueTotal, (totalPendente + totalPago), saldoRestante);
 }
 
 // ==========================================
@@ -390,14 +439,19 @@ formReceita.addEventListener('submit', (e) => {
 
 formConta.addEventListener('submit', (e) => {
     e.preventDefault();
+    const vencimentoInput = document.getElementById('vencimento');
+    
     const novaConta = {
         nome: nomeInput.value,
+        vencimento: vencimentoInput.value, // Captura o dia digitado
         valor: formatarStringParaFloat(valorInput.value),
         paga: false
     };
     contas.push(novaConta);
     salvarNoFirebase();
+    
     nomeInput.value = '';
+    vencimentoInput.value = '';
     valorInput.value = '';
     nomeInput.focus();
 });
