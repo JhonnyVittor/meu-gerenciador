@@ -321,3 +321,30 @@ button:hover { background-color: #4f46e5; }
     color: #64748b;
     text-decoration: none !important;
 }
+/* Container que junta o ícone e o select */
+.select-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+/* Estilização do ícone de calendário */
+.icone-calendario {
+    position: absolute;
+    left: 12px; /* Distância da borda esquerda do select */
+    color: #06b6d4; /* Mesma cor ciano do seu card de saldo */
+    font-size: 1rem;
+    pointer-events: none; /* Garante que clicar no ícone ainda abre o select */
+}
+
+/* Ajuste no seu select atual para dar espaço para o ícone não cobrir o texto */
+.input-seletor-mes {
+    padding-left: 38px; /* Empurra o texto do mês para a direita, abrindo espaço para o calendário */
+    background-color: #1e293b; /* Cor escura padrão dos seus inputs */
+    color: #ffffff;
+    border: 1px solid #334155;
+    border-radius: 6px;
+    height: 38px;
+    cursor: pointer;
+    font-weight: 600;
+}
