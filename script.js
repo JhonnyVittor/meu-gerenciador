@@ -126,6 +126,34 @@ function atualizarDashboard() {
 
     atualizarGrafico(saldoRestante, totalPendente, totalPago);
     salvarResumoNoHistorico(receitaTotal, (totalPendente + totalPago), saldoRestante);
+const resumoCategorias = document.getElementById('resumo-categorias');
+resumoCategorias.innerHTML = ''; // Limpa antes de atualizar
+
+// Cria um objeto para somar os valores
+let somaPorCategoria = {};
+
+contas.forEach(conta => {
+    if (!conta.paga) { // Soma apenas o que ainda está pendente
+        let cat = conta.categoria || 'Outros';
+        somaPorCategoria[cat] = (somaPorCategoria[cat] || 0) + conta.valor;
+    }
+});
+
+// Renderiza a lista de categorias
+Object.keys(somaPorCategoria).forEach(cat => {
+    const li = document.createElement('li');
+    li.className = 'conta-item';
+    li.innerHTML = `
+        <div class="conta-info">
+            <strong>${cat}</strong>
+        </div>
+        <div class="conta-info" style="text-align: right;">
+            <span>R$ ${formatarFloatParaReal(somaPorCategoria[cat])}</span>
+        </div>
+    `;
+    resumoCategorias.appendChild(li);
+});
+
 }
 
 // ==========================================
