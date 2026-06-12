@@ -1,0 +1,32 @@
+.dashboard-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.header-sistema {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    flex-wrap: wrap !important;
+    gap: 15px !important;
+    margin-bottom: 25px !important;
+    width: 100% !important;
+}
+
+.main-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    align-items: start;
+}
+
+.chart-sticky {
+    position: sticky;
+    top: 20px;
+}
+
+@media (max-width: 900px) {
+    .main-content { 
+        grid-template-columns: 1fr; 
+    }
+}
