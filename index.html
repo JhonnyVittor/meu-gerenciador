@@ -5,17 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Financeiro Familiar</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
 <header class="header-sistema">
     <h1>Finanças Família 📊</h1>
     <div class="seletor-mes-container">
-        <button id="btn-mes-anterior" class="btn-seta-mes">◀</button>
+    <button id="btn-mes-anterior" class="btn-ta" aria-label="Mês anterior">
+        <i class="fa-solid fa-chevron-left"></i>
+    </button>
+    
+    <div class="select-wrapper">
+        <i class="fa-regular fa-calendar-days icone-calendario"></i>
         <select id="seletor-mes" class="input-seletor-mes">
             </select>
-        <button id="btn-mes-proximo" class="btn-seta-mes">▶</button>
     </div>
+
+    <button id="btn-mes-proximo" class="btn-seta" aria-label="Próximo mês">
+        <i class="fa-solid fa-chevron-right"></i>
+    </button>
+</div>
 </header>
 
     <div class="cards-grid">
@@ -44,11 +54,11 @@
                 <h2>Salários Fixos</h2>
                 <div class="form-group-inline">
                     <div>
-                        <label for="salario-1">Meu Salário</label>
+                        <label for="salario-1">Salário 1</label>
                         <input type="text" id="salario-1" placeholder="R$ 0,00" class="mascara-moeda">
                     </div>
                     <div>
-                        <label for="salario-2">Salário Esposa</label>
+                        <label for="salario-2">Salário 2</label>
                         <input type="text" id="salario-2" placeholder="R$ 0,00" class="mascara-moeda">
                     </div>
                 </div>
