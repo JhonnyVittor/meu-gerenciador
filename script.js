@@ -343,3 +343,18 @@ if (document.readyState === 'loading') {
 window.alternarStatusConta = index => { contas[index].paga = !contas[index].paga; salvarNoFirebase(); };
 window.removerConta = index => { if (confirm('Deseja apagar esta conta?')) { contas.splice(index, 1); salvarNoFirebase(); } };
 window.removerReceitaExtra = index => { if (confirm('Deseja apagar esta receita extra?')) { receitasExtras.splice(index, 1); salvarNoFirebase(); } };
+window.filtrarDados = () => {
+    const categoriaSelecionada = document.getElementById('filtro-categoria').value;
+    const items = document.querySelectorAll('#lista-contas .conta-item');
+
+    items.forEach(item => {
+        // Pega o texto da categoria que você inseriu no span lá atrás
+        const categoriaItem = item.querySelector('span').innerText.toUpperCase();
+        
+        if (categoriaSelecionada === 'Todas' || categoriaItem.includes(categoriaSelecionada.toUpperCase())) {
+            item.style.display = 'flex'; // Mostra
+        } else {
+            item.style.display = 'none'; // Esconde
+        }
+    });
+};
